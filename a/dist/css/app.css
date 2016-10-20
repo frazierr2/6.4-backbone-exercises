@@ -5807,11 +5807,16 @@ button.close {
   .hidden-print {
     display: none !important; } }
 *,
-*::before,
-*::after {
+*::after,
+*::before {
   box-sizing: border-box; }
 
 img {
   max-width: 100%; }
+
+#blog-header {
+  text-align: center;
+  text-transform: uppercase;
+  text-decoration: underline; }
 
 /*# sourceMappingURL=app.css.map */
