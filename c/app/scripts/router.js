@@ -5,7 +5,8 @@ var views = require('./views/views');
 
 var AppRouter = Backbone.Router.extend({
   routes: {
-    '': 'index'
+    '': 'index',
+    'post/:id': 'getPost'
   },
   initialize: function() {
     this.collection = new models.PostCollection();
@@ -20,6 +21,14 @@ var AppRouter = Backbone.Router.extend({
     // console.log(blogs);
     $('.title').append(title.render().el);
     $('.blogs').append(blogs.render().el);
+  },
+  getPost: function(id) {
+    var blogDetail = this.collection.get(id);
+    var blog = new views.BlogDetail({
+      model: blogDetail
+    });
+
+    $('.app').html(blog.render().el);
   }
 
 });

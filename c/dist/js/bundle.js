@@ -8,7 +8,7 @@ require('./router');
 
 Backbone.history.start();
 
-},{"./router":3,"backbone":7,"jquery":28}],2:[function(require,module,exports){
+},{"./router":3,"backbone":8,"jquery":29}],2:[function(require,module,exports){
 "use strict";
 var Backbone = require('backbone');
 var $ = require('jquery');
@@ -27,7 +27,7 @@ module.exports = {
   PostCollection: PostCollection
 }
 
-},{"backbone":7,"jquery":28}],3:[function(require,module,exports){
+},{"backbone":8,"jquery":29}],3:[function(require,module,exports){
 "use strict";
 var $ = require('jquery');
 var Backbone = require('backbone');
@@ -36,7 +36,8 @@ var views = require('./views/views');
 
 var AppRouter = Backbone.Router.extend({
   routes: {
-    '': 'index'
+    '': 'index',
+    'post/:id': 'getPost'
   },
   initialize: function() {
     this.collection = new models.PostCollection();
@@ -51,6 +52,14 @@ var AppRouter = Backbone.Router.extend({
     // console.log(blogs);
     $('.title').append(title.render().el);
     $('.blogs').append(blogs.render().el);
+  },
+  getPost: function(id) {
+    var blogDetail = this.collection.get(id);
+    var blog = new views.BlogDetail({
+      model: blogDetail
+    });
+
+    $('.app').html(blog.render().el);
   }
 
 });
@@ -58,12 +67,13 @@ var AppRouter = Backbone.Router.extend({
 var router = new AppRouter();
 module.exports = router;
 
-},{"./models/models":2,"./views/views":4,"backbone":7,"jquery":28}],4:[function(require,module,exports){
+},{"./models/models":2,"./views/views":4,"backbone":8,"jquery":29}],4:[function(require,module,exports){
 "use strict";
 var $ = require('jquery');
 var Backbone = require('backbone');
 var blogview = require('../../templates/blogview.hbs');
 var blogbody = require('../../templates/blogbody.hbs');
+var blogcontent = require('../../templates/blogcontent.hbs');
 
 
 var RecentBlog = Backbone.View.extend({
@@ -116,36 +126,66 @@ var BlogItem = Backbone.View.extend({
   }
 });
 
+var BlogDetail = Backbone.View.extend({
+  tagName: 'h1',
+  attributes: {
+    id: 'blogDetail'
+  },
+  template: blogcontent,
+  render: function() {
+    var modelData = this.model.toJSON();
+    var blogtemp = this.template(modelData);
+    this.$el.html(blogtemp);
+    return this;
+  }
+});
 
 module.exports = {
   RecentBlog: RecentBlog,
   BlogListView: BlogListView,
-  BlogItem: BlogItem
+  BlogItem: BlogItem,
+  BlogDetail: BlogDetail
 }
 
-},{"../../templates/blogbody.hbs":5,"../../templates/blogview.hbs":6,"backbone":7,"jquery":28}],5:[function(require,module,exports){
+},{"../../templates/blogbody.hbs":5,"../../templates/blogcontent.hbs":6,"../../templates/blogview.hbs":7,"backbone":8,"jquery":29}],5:[function(require,module,exports){
 "use strict";
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
-  return "\n  <tr>\n    <td>"
+  return "  <tr>\n    <td class=\"text-center\"><a href=\"#/post/"
+    + alias4(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
+    + "\">"
     + alias4(((helper = (helper = helpers.title || (depth0 != null ? depth0.title : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"title","hash":{},"data":data}) : helper)))
-    + "</td>\n    <td>"
+    + "</a></td>\n    <!-- <td>"
     + alias4(((helper = (helper = helpers["blog-content"] || (depth0 != null ? depth0["blog-content"] : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"blog-content","hash":{},"data":data}) : helper)))
-    + "</td>\n  </tr>\n";
+    + "</td> -->\n  </tr>\n";
 },"useData":true});
 
-},{"hbsfy/runtime":27}],6:[function(require,module,exports){
+},{"hbsfy/runtime":28}],6:[function(require,module,exports){
 "use strict";
 // hbsfy compiled Handlebars template
 var HandlebarsCompiler = require('hbsfy/runtime');
 module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "<thead>\n  <tr>\n    <th class=\"text-center\">Title</th>\n    <th class=\"text-center\">Blog</th>\n  </tr>\n</thead>\n";
+    var helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
+
+  return "<div>\n  <div>"
+    + alias4(((helper = (helper = helpers.title || (depth0 != null ? depth0.title : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"title","hash":{},"data":data}) : helper)))
+    + "</div>\n  <div>"
+    + alias4(((helper = (helper = helpers["blog-content"] || (depth0 != null ? depth0["blog-content"] : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"blog-content","hash":{},"data":data}) : helper)))
+    + "</div>\n</div>\n";
 },"useData":true});
 
-},{"hbsfy/runtime":27}],7:[function(require,module,exports){
+},{"hbsfy/runtime":28}],7:[function(require,module,exports){
+"use strict";
+// hbsfy compiled Handlebars template
+var HandlebarsCompiler = require('hbsfy/runtime');
+module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+    return "<thead>\n  <tr>\n    <th class=\"text-center title-text\">Title</th>\n    <!-- <th class=\"text-center\">Blog</th> -->\n  </tr>\n</thead>\n";
+},"useData":true});
+
+},{"hbsfy/runtime":28}],8:[function(require,module,exports){
 (function (global){
 //     Backbone.js 1.3.3
 
@@ -2069,7 +2109,7 @@ module.exports = HandlebarsCompiler.template({"compiler":[7,">= 4.0.0"],"main":f
 });
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"jquery":28,"underscore":29}],8:[function(require,module,exports){
+},{"jquery":29,"underscore":30}],9:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -2137,7 +2177,7 @@ exports['default'] = inst;
 module.exports = exports['default'];
 
 
-},{"./handlebars/base":9,"./handlebars/exception":12,"./handlebars/no-conflict":22,"./handlebars/runtime":23,"./handlebars/safe-string":24,"./handlebars/utils":25}],9:[function(require,module,exports){
+},{"./handlebars/base":10,"./handlebars/exception":13,"./handlebars/no-conflict":23,"./handlebars/runtime":24,"./handlebars/safe-string":25,"./handlebars/utils":26}],10:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -2243,7 +2283,7 @@ exports.createFrame = _utils.createFrame;
 exports.logger = _logger2['default'];
 
 
-},{"./decorators":10,"./exception":12,"./helpers":13,"./logger":21,"./utils":25}],10:[function(require,module,exports){
+},{"./decorators":11,"./exception":13,"./helpers":14,"./logger":22,"./utils":26}],11:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -2261,7 +2301,7 @@ function registerDefaultDecorators(instance) {
 }
 
 
-},{"./decorators/inline":11}],11:[function(require,module,exports){
+},{"./decorators/inline":12}],12:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -2292,7 +2332,7 @@ exports['default'] = function (instance) {
 module.exports = exports['default'];
 
 
-},{"../utils":25}],12:[function(require,module,exports){
+},{"../utils":26}],13:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -2334,7 +2374,7 @@ exports['default'] = Exception;
 module.exports = exports['default'];
 
 
-},{}],13:[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -2382,7 +2422,7 @@ function registerDefaultHelpers(instance) {
 }
 
 
-},{"./helpers/block-helper-missing":14,"./helpers/each":15,"./helpers/helper-missing":16,"./helpers/if":17,"./helpers/log":18,"./helpers/lookup":19,"./helpers/with":20}],14:[function(require,module,exports){
+},{"./helpers/block-helper-missing":15,"./helpers/each":16,"./helpers/helper-missing":17,"./helpers/if":18,"./helpers/log":19,"./helpers/lookup":20,"./helpers/with":21}],15:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -2423,7 +2463,7 @@ exports['default'] = function (instance) {
 module.exports = exports['default'];
 
 
-},{"../utils":25}],15:[function(require,module,exports){
+},{"../utils":26}],16:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -2519,7 +2559,7 @@ exports['default'] = function (instance) {
 module.exports = exports['default'];
 
 
-},{"../exception":12,"../utils":25}],16:[function(require,module,exports){
+},{"../exception":13,"../utils":26}],17:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -2546,7 +2586,7 @@ exports['default'] = function (instance) {
 module.exports = exports['default'];
 
 
-},{"../exception":12}],17:[function(require,module,exports){
+},{"../exception":13}],18:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -2577,7 +2617,7 @@ exports['default'] = function (instance) {
 module.exports = exports['default'];
 
 
-},{"../utils":25}],18:[function(require,module,exports){
+},{"../utils":26}],19:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -2605,7 +2645,7 @@ exports['default'] = function (instance) {
 module.exports = exports['default'];
 
 
-},{}],19:[function(require,module,exports){
+},{}],20:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -2619,7 +2659,7 @@ exports['default'] = function (instance) {
 module.exports = exports['default'];
 
 
-},{}],20:[function(require,module,exports){
+},{}],21:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -2654,7 +2694,7 @@ exports['default'] = function (instance) {
 module.exports = exports['default'];
 
 
-},{"../utils":25}],21:[function(require,module,exports){
+},{"../utils":26}],22:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -2703,7 +2743,7 @@ exports['default'] = logger;
 module.exports = exports['default'];
 
 
-},{"./utils":25}],22:[function(require,module,exports){
+},{"./utils":26}],23:[function(require,module,exports){
 (function (global){
 /* global window */
 'use strict';
@@ -2727,7 +2767,7 @@ module.exports = exports['default'];
 
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],23:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -3021,7 +3061,7 @@ function executeDecorators(fn, prog, container, depths, data, blockParams) {
 }
 
 
-},{"./base":9,"./exception":12,"./utils":25}],24:[function(require,module,exports){
+},{"./base":10,"./exception":13,"./utils":26}],25:[function(require,module,exports){
 // Build out our basic SafeString type
 'use strict';
 
@@ -3038,7 +3078,7 @@ exports['default'] = SafeString;
 module.exports = exports['default'];
 
 
-},{}],25:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 'use strict';
 
 exports.__esModule = true;
@@ -3164,15 +3204,15 @@ function appendContextPath(contextPath, id) {
 }
 
 
-},{}],26:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 // Create a simple path alias to allow browserify to resolve
 // the runtime on a supported path.
 module.exports = require('./dist/cjs/handlebars.runtime')['default'];
 
-},{"./dist/cjs/handlebars.runtime":8}],27:[function(require,module,exports){
+},{"./dist/cjs/handlebars.runtime":9}],28:[function(require,module,exports){
 module.exports = require("handlebars/runtime")["default"];
 
-},{"handlebars/runtime":26}],28:[function(require,module,exports){
+},{"handlebars/runtime":27}],29:[function(require,module,exports){
 /*!
  * jQuery JavaScript Library v2.2.4
  * http://jquery.com/
@@ -12988,7 +13028,7 @@ if ( !noGlobal ) {
 return jQuery;
 }));
 
-},{}],29:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 //     Underscore.js 1.8.3
 //     http://underscorejs.org
 //     (c) 2009-2015 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors

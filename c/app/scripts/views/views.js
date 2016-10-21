@@ -2,6 +2,7 @@ var $ = require('jquery');
 var Backbone = require('backbone');
 var blogview = require('../../templates/blogview.hbs');
 var blogbody = require('../../templates/blogbody.hbs');
+var blogcontent = require('../../templates/blogcontent.hbs');
 
 
 var RecentBlog = Backbone.View.extend({
@@ -54,9 +55,23 @@ var BlogItem = Backbone.View.extend({
   }
 });
 
+var BlogDetail = Backbone.View.extend({
+  tagName: 'h1',
+  attributes: {
+    id: 'blogDetail'
+  },
+  template: blogcontent,
+  render: function() {
+    var modelData = this.model.toJSON();
+    var blogtemp = this.template(modelData);
+    this.$el.html(blogtemp);
+    return this;
+  }
+});
 
 module.exports = {
   RecentBlog: RecentBlog,
   BlogListView: BlogListView,
-  BlogItem: BlogItem
+  BlogItem: BlogItem,
+  BlogDetail: BlogDetail
 }

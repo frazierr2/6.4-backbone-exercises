@@ -5819,4 +5819,8 @@ img {
   text-decoration: underline;
   text-transform: uppercase; }
 
+.title-text {
+  font-size: 20px;
+  text-transform: uppercase; }
+
 /*# sourceMappingURL=app.css.map */
