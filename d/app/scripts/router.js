@@ -20,6 +20,10 @@ var AppRouter = Backbone.Router.extend({
       collection: this.collection
     });
     $('.app').append(form.render().el);
+    var bookmarks = new views.BookmarkListView({
+      collection: this.collection
+    });
+    $('.tableview').append(bookmarks.render().el);
   }
 });
 
