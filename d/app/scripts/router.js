@@ -26,14 +26,14 @@ var AppRouter = Backbone.Router.extend({
     });
     $('.tableview').append(bookmarks.render().el);
   },
-  // getTags: function(id) {
-  //   var tagDetail = this.collection.get(id);
-  //   var tag = new views.TagList({
-  //     model: tagDetail
-  //   });
-  //   $('.tags').html(tag.render().el);
-  // }
-
+  getTags: function(id) {
+      var tagDetail = this.collection.get(id);
+      var tag = new views.TagList({
+        model: tagDetail
+      });
+      $('.tags').html(tag.render().el);
+    }
+    //DO A THIS.COLLECTION.FILTER() INSTEAD OF .GET
 });
 
 
