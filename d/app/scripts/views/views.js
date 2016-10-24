@@ -79,24 +79,24 @@ var BookmarkItem = Backbone.View.extend({
   }
 });
 
-var TagList = Backbone.View.extend({
-  tagName: 'h3',
-  attributes: {
-    id: 'taglist'
-  },
-  template: TagFilterList,
-  render: function() {
-    var context = this.model.toJSON();
-    var tagList = this.template(context);
-    this.$el.html(tagList);
-    return this;
-  }
-});
+// var TagList = Backbone.View.extend({
+//   tagName: 'h3',
+//   attributes: {
+//     id: 'taglist'
+//   },
+//   template: TagFilterList,
+//   render: function() {
+//     var context = this.model.toJSON();
+//     var tagList = this.template(context);
+//     this.$el.html(tagList);
+//     return this;
+//   }
+// });
 
 module.exports = {
   BookmarkApp: BookmarkApp,
   BookMarkInput: BookMarkInput,
   BookmarkListView: BookmarkListView,
   BookmarkItem: BookmarkItem,
-  TagList: TagList
+  // TagList: TagList
 }
