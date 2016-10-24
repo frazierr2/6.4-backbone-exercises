@@ -6,8 +6,8 @@ var views = require('./views/views');
 
 var AppRouter = Backbone.Router.extend({
   routes: {
-    '': 'index'
-      // 'tags/:id': 'getTags'
+    '': 'index',
+      'tags/:id': 'getTags'
   },
   initialize: function() {
     this.collection = new models.BookmarkCollection();
