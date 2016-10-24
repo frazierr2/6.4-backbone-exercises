@@ -6,7 +6,8 @@ var views = require('./views/views');
 
 var AppRouter = Backbone.Router.extend({
   routes: {
-    '': 'index'
+    '': 'index',
+    'tags/:id': 'getTags'
   },
   initialize: function() {
     this.collection = new models.BookmarkCollection();
@@ -24,7 +25,15 @@ var AppRouter = Backbone.Router.extend({
       collection: this.collection
     });
     $('.tableview').append(bookmarks.render().el);
+  },
+  getTags: function(id) {
+    var tagDetail = this.collection.get(id);
+    var tag = new views.TagList({
+      model: tagDetail
+    });
+    $('.tags').html(tag.render().el);
   }
+
 });
 
 
